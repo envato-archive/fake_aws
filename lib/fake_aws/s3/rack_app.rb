@@ -30,7 +30,7 @@ module FakeAWS
 
           [
             200,
-            {'Content-Type' => 'text/plain'},
+            {'Content-Type' => 'application/xml'},
             ["hello world"]
           ]
         else
@@ -48,7 +48,7 @@ module FakeAWS
         if File.exists?(full_path)
           [
             200,
-            { "Content-Type" => "text/plain" },
+            { "Content-Type" => get_content_type(full_path) },
             File.new(File.join(@directory, env["PATH_INFO"]))
           ]
         else
@@ -77,6 +77,19 @@ module FakeAWS
         EOF
       end
 
+      def get_content_type(file_path)
+        get_metadata(file_path, "Content-Type") || "application/octet-stream"
+      end
+
+      def get_metadata(file_path, key)
+        metadata_file_path = "#{file_path}.metadata.json"
+        metadata = if File.exists?(metadata_file_path)
+          JSON.parse(File.read(metadata_file_path))
+        else
+          {}
+        end
+        metadata[key]
+      end
     end
 
   end

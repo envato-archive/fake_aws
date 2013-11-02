@@ -1,6 +1,7 @@
 require 'fake_aws/s3/rack_app'
 require 'faraday'
 require 'rack/test'
+require 'json'
 
 describe FakeAWS::S3::RackApp do
   let(:s3_path)       { "tmp" }
@@ -91,7 +92,15 @@ describe FakeAWS::S3::RackApp do
         expect(response.body).to eq(file_contents)
       end
 
-      it "returns the right content type"
+      it "returns the right content type" do
+        file_metadata = {
+          "Content-Type" => "text/plain"
+        }.to_json
+        File.write(File.join(s3_path, bucket, "#{file_name}.metadata.json"), file_metadata)
+
+        response = get_example_file(file_name)
+        expect(response.headers["Content-Type"]).to eq("text/plain")
+      end
     end
 
     context "with a file that doesn't exist" do
