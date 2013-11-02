@@ -68,7 +68,6 @@ describe FakeAWS::S3::RackApp do
     end
   end
 
-
   context "GET object" do
     def get_example_file(key)
       connection.get(File.join(bucket, key))
@@ -91,6 +90,8 @@ describe FakeAWS::S3::RackApp do
         response = get_example_file(file_name)
         expect(response.body).to eq(file_contents)
       end
+
+      it "returns the right content type"
     end
 
     context "with a file that doesn't exist" do

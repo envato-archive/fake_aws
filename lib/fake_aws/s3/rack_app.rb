@@ -21,33 +21,25 @@ module FakeAWS
         path_components = env['PATH_INFO'].split("/")
         _, bucket, *directories, file_name = path_components
 
-        unless Dir.exists?(File.join(@directory, bucket))
-          # TODO: Fill out the bits of the XML response that we haven't yet.
-          return [
+
+        if Dir.exists?(File.join(@directory, bucket))
+          FileUtils.mkdir_p(File.join(@directory, bucket, *directories))
+
+          full_path = File.join(@directory, env['PATH_INFO'])
+          IO.write(full_path, env["rack.input"].read)
+
+          [
+            200,
+            {'Content-Type' => 'text/plain'},
+            ["hello world"]
+          ]
+        else
+          [
             404,
             { "Content-Type" => "application/xml" },
-            <<-EOF
-<?xml version="1.0" encoding="UTF-8"?>
-<Error>
-  <Code>NoSuchBucket</Code>
-  <Message>The specified bucket does not exist.</Message>
-  <Resource>/#{bucket}</Resource>
-  <RequestId></RequestId>
-</Error>
-            EOF
+            generate_xml_response("NoSuchBucket", "The specified bucket does not exist.", "/#{bucket}")
           ]
         end
-
-        FileUtils.mkdir_p(File.join(@directory, bucket, *directories))
-
-        full_path = File.join(@directory, env['PATH_INFO'])
-        IO.write(full_path, env["rack.input"].read)
-
-        [
-          200,
-          {'Content-Type' => 'text/plain'},
-          ["hello world"]
-        ]
       end
 
       def handle_get(env)
@@ -64,17 +56,25 @@ module FakeAWS
           [
             404,
             { "Content-Type" => "application/xml" },
-            <<-EOF
-<?xml version="1.0" encoding="UTF-8"?>
-<Error>
-  <Code>NoSuchKey</Code>
-  <Message>The specified key does not exist.</Message>
-  <Resource></Resource>
-  <RequestId></RequestId>
-</Error>
-            EOF
+            # TODO: need to figure out what the resource should be here.
+            generate_xml_response("NoSuchKey", "The specified key does not exist.", "")
           ]
         end
+      end
+
+    private
+
+      def generate_xml_response(code, message, resource)
+        # TODO: Fill out the bits of the XML response that we haven't yet.
+        <<-EOF
+<?xml version="1.0" encoding="UTF-8"?>
+<Error>
+  <Code>#{code}</Code>
+  <Message>#{message}</Message>
+  <Resource>#{resource}</Resource>
+  <RequestId></RequestId>
+</Error>
+        EOF
       end
 
     end
