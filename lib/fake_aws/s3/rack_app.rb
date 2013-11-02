@@ -22,17 +22,18 @@ module FakeAWS
         _, bucket, *directories, file_name = path_components
 
         unless Dir.exists?(File.join(@directory, bucket))
+          # TODO: Fill out the bits of the XML response that we haven't yet.
           return [
             404,
             { "Content-Type" => "application/xml" },
             <<-EOF
-    <?xml version="1.0" encoding="UTF-8"?>
-    <Error>
-      <Code>NoSuchBucket</Code>
-      <Message>The specified bucket does not exist.</Message>
-      <Resource>/#{bucket}</Resource>
-      <RequestId>4442587FB7D0A2F9</RequestId>
-    </Error>}
+<?xml version="1.0" encoding="UTF-8"?>
+<Error>
+  <Code>NoSuchBucket</Code>
+  <Message>The specified bucket does not exist.</Message>
+  <Resource>/#{bucket}</Resource>
+  <RequestId></RequestId>
+</Error>
             EOF
           ]
         end
@@ -50,11 +51,30 @@ module FakeAWS
       end
 
       def handle_get(env)
-        [
-          200,
-          { "Content-Type" => "text/plain" },
-          File.new(File.join(@directory, env["PATH_INFO"]))
-        ]
+        full_path = File.join(@directory, env['PATH_INFO'])
+
+        if File.exists?(full_path)
+          [
+            200,
+            { "Content-Type" => "text/plain" },
+            File.new(File.join(@directory, env["PATH_INFO"]))
+          ]
+        else
+          # TODO: Fill out the bits of the XML response that we haven't yet.
+          [
+            404,
+            { "Content-Type" => "application/xml" },
+            <<-EOF
+<?xml version="1.0" encoding="UTF-8"?>
+<Error>
+  <Code>NoSuchKey</Code>
+  <Message>The specified key does not exist.</Message>
+  <Resource></Resource>
+  <RequestId></RequestId>
+</Error>
+            EOF
+          ]
+        end
       end
 
     end
