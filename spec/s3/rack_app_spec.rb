@@ -9,7 +9,7 @@ describe FakeAWS::S3::RackApp do
     subject { described_class.new(s3_path) }
 
     let(:connection) do
-      connection = Faraday.new do |connection|
+      Faraday.new do |connection|
         connection.adapter :rack, subject
       end
     end
@@ -39,18 +39,18 @@ describe FakeAWS::S3::RackApp do
       it "returns a correctly constructed response"
 
       it "creates a file" do
-        response = put_example_file("mah-file.txt")
+        put_example_file("mah-file.txt")
         expect(File.read(File.join(s3_path, "/mah-bucket/mah-file.txt"))).to eq("Hello, world!")
       end
 
       it "creates sub-directories for paths that contain them" do
-        response = put_example_file("foo/bar/mah-file.txt")
+        put_example_file("foo/bar/mah-file.txt")
         expect(File.read(File.join(s3_path, "/mah-bucket/foo/bar/mah-file.txt"))).to eq("Hello, world!")
       end
 
       it "handles sub-directories that already exist" do
         FileUtils.mkdir_p(File.join(s3_path, "mah-bucket/foo/bar"))
-        response = put_example_file("foo/bar/mah-file.txt")
+        put_example_file("foo/bar/mah-file.txt")
         expect(File.read(File.join(s3_path, "/mah-bucket/foo/bar/mah-file.txt"))).to eq("Hello, world!")
       end
     end
@@ -63,7 +63,6 @@ describe FakeAWS::S3::RackApp do
 
       it "returns the correct XML response"
     end
-
   end
 end
 
