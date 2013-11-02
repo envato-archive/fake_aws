@@ -28,6 +28,10 @@ module FakeAWS
           full_path = File.join(@directory, env['PATH_INFO'])
           IO.write(full_path, env["rack.input"].read)
 
+          metadata_file_path = "#{full_path}.metadata.json"
+          IO.write(metadata_file_path, 
+            {"Content-Type" => env['CONTENT_TYPE']}.to_json)
+
           [
             200,
             {'Content-Type' => 'application/xml'},

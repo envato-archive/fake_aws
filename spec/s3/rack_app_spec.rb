@@ -47,6 +47,14 @@ describe FakeAWS::S3::RackApp do
         expect(File.read(File.join(s3_path, "/#{bucket}/#{file_name}"))).to eq(file_contents)
       end
 
+      it "stores the content-type" do
+        put_example_file(file_name)
+        metadata_file_path = File.join(s3_path, "/#{bucket}/#{file_name}.metadata.json")
+        metadata = JSON.parse(File.read(metadata_file_path))
+        
+        expect(metadata["Content-Type"]).to eq("text/plain")
+      end
+
       it "creates sub-directories for paths that contain them" do
         put_example_file("foo/bar/#{file_name}")
         expect(File.read(File.join(s3_path, "/#{bucket}/foo/bar/#{file_name}"))).to eq(file_contents)
