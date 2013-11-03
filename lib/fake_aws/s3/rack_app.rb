@@ -10,14 +10,17 @@ module FakeAWS
       end
 
       def call(env)
-        case env["REQUEST_METHOD"]
+        operation_class = case env["REQUEST_METHOD"]
           when "PUT"
-            Operations::PutObject.new(@directory).handle_put(env)
+            Operations::PutObject
           when "GET"
-            Operations::GetObject.new(@directory).handle_get(env)
+            Operations::GetObject
           else
-            raise "Unhandled request method"  # TODO: Make an proper exception for this.
+            raise "Unhandled request method"  # TODO: Make a proper exception for this.
         end
+
+        operation = operation_class.new(@directory)
+        operation.call(env)
       end
     end
 

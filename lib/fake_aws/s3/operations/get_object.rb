@@ -7,7 +7,7 @@ module FakeAWS
           @directory = directory
         end
 
-        def handle_get(env)
+        def call(env)
           full_path = File.join(@directory, env['PATH_INFO'])
 
           if File.exists?(full_path)

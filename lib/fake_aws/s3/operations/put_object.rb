@@ -7,7 +7,7 @@ module FakeAWS
           @directory = directory
         end
 
-        def handle_put(env)
+        def call(env)
           path_components = env['PATH_INFO'].split("/")
           _, bucket, *directories, file_name = path_components
 
