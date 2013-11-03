@@ -1,3 +1,5 @@
+require 'fake_aws/s3/xml_response'
+
 module FakeAWS
   module S3
     module Operations
@@ -30,7 +32,7 @@ module FakeAWS
             [
               404,
               { "Content-Type" => "application/xml" },
-              generate_xml_response("NoSuchBucket", "The specified bucket does not exist.", "/#{bucket}")
+              XMLResponse.new("NoSuchBucket", "The specified bucket does not exist.", "/#{bucket}")
             ]
           end
         end
@@ -49,19 +51,6 @@ module FakeAWS
           end
 
           metadata
-        end
-
-        def generate_xml_response(code, message, resource)
-          # TODO: Fill out the bits of the XML response that we haven't yet.
-          <<-EOF
-<?xml version="1.0" encoding="UTF-8"?>
-<Error>
-  <Code>#{code}</Code>
-  <Message>#{message}</Message>
-  <Resource>#{resource}</Resource>
-  <RequestId></RequestId>
-</Error>
-          EOF
         end
 
       end

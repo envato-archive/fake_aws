@@ -1,3 +1,5 @@
+require 'fake_aws/s3/xml_response'
+
 module FakeAWS
   module S3
     module Operations
@@ -22,25 +24,12 @@ module FakeAWS
               404,
               { "Content-Type" => "application/xml" },
               # TODO: need to figure out what the resource should be here.
-              generate_xml_response("NoSuchKey", "The specified key does not exist.", "")
+              XMLResponse.new("NoSuchKey", "The specified key does not exist.", "")
             ]
           end
         end
 
       private
-
-        def generate_xml_response(code, message, resource)
-          # TODO: Fill out the bits of the XML response that we haven't yet.
-          <<-EOF
-<?xml version="1.0" encoding="UTF-8"?>
-<Error>
-<Code>#{code}</Code>
-<Message>#{message}</Message>
-<Resource>#{resource}</Resource>
-<RequestId></RequestId>
-</Error>
-          EOF
-        end
 
         def get_content_type(file_path)
           metadata_storage = MetadataStorage.new(file_path)
