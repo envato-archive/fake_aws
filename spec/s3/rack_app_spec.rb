@@ -26,8 +26,14 @@ describe FakeAWS::S3::RackApp do
       connection.put do |request|
         request.url(File.join(bucket, key))
         request.headers["Content-Type"] = "text/plain"
+        request.headers["x-amz-meta-example"] = "example metadata"
         request.body = file_contents
       end
+    end
+
+    def read_example_metadata(key)
+      metadata_file_path = File.join(s3_path, "/#{bucket}/#{key}.metadata.json")
+      JSON.parse(File.read(metadata_file_path))
     end
 
     context "with an existing bucket" do
@@ -49,10 +55,16 @@ describe FakeAWS::S3::RackApp do
 
       it "stores the content-type" do
         put_example_file(file_name)
-        metadata_file_path = File.join(s3_path, "/#{bucket}/#{file_name}.metadata.json")
-        metadata = JSON.parse(File.read(metadata_file_path))
-        
+
+        metadata = read_example_metadata(file_name)
         expect(metadata["Content-Type"]).to eq("text/plain")
+      end
+
+      it "stores user-defined metadata" do
+        put_example_file(file_name)
+
+        metadata = read_example_metadata(file_name)
+        expect(metadata["x-amz-meta-example"]).to eq("example metadata")
       end
 
       it "creates sub-directories for paths that contain them" do

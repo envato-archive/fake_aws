@@ -28,9 +28,8 @@ module FakeAWS
           full_path = File.join(@directory, env['PATH_INFO'])
           IO.write(full_path, env["rack.input"].read)
 
-          metadata_file_path = "#{full_path}.metadata.json"
-          IO.write(metadata_file_path, 
-            {"Content-Type" => env['CONTENT_TYPE']}.to_json)
+          metadata_storage = MetadataStorage.new(full_path)
+          metadata_storage.write_metadata(generate_metadata(env))
 
           [
             200,
@@ -44,6 +43,20 @@ module FakeAWS
             generate_xml_response("NoSuchBucket", "The specified bucket does not exist.", "/#{bucket}")
           ]
         end
+      end
+
+      def generate_metadata(env)
+        metadata = {
+          "Content-Type" => env['CONTENT_TYPE']
+        }
+
+        user_metadata_env_keys = env.keys.select {|key| key =~ /^HTTP_X_AMZ_META_/ }
+        user_metadata_env_keys.each do |env_key|
+          metadata_key = env_key.sub(/^HTTP_/, "").gsub("_", "-").downcase
+          metadata[metadata_key] = env[env_key]
+        end
+
+        metadata
       end
 
       def handle_get(env)
@@ -82,18 +95,11 @@ module FakeAWS
       end
 
       def get_content_type(file_path)
-        get_metadata(file_path, "Content-Type") || "application/octet-stream"
+        metadata_storage = MetadataStorage.new(file_path)
+        metadata = metadata_storage.read_metadata
+        metadata["Content-Type"] || "application/octet-stream"
       end
 
-      def get_metadata(file_path, key)
-        metadata_file_path = "#{file_path}.metadata.json"
-        metadata = if File.exists?(metadata_file_path)
-          JSON.parse(File.read(metadata_file_path))
-        else
-          {}
-        end
-        metadata[key]
-      end
     end
 
   end
