@@ -5,36 +5,52 @@ module FakeAWS
     module Operations
 
       class GetObject
-        def initialize(directory)
+        def initialize(directory, env)
           @directory = directory
+          @env       = env
         end
 
-        def call(env)
-          full_path = File.join(@directory, env['PATH_INFO'])
-
-          if File.exists?(full_path)
-            [
-              200,
-              { "Content-Type" => get_content_type(full_path) },
-              File.new(File.join(@directory, env["PATH_INFO"]))
-            ]
+        def call
+          if File.exists?(file_path)
+            success_response
           else
-            # TODO: Fill out the bits of the XML response that we haven't yet.
-            [
-              404,
-              { "Content-Type" => "application/xml" },
-              # TODO: need to figure out what the resource should be here.
-              XMLErrorResponse.new("NoSuchKey", "The specified key does not exist.", "")
-            ]
+            no_such_key_response
           end
         end
 
       private
 
-        def get_content_type(file_path)
-          metadata_storage = MetadataStorage.new(file_path)
-          metadata = metadata_storage.read_metadata
+        def success_response
+          [
+            200,
+            { "Content-Type" => content_type },
+            File.new(file_path)
+          ]
+        end
+
+        def no_such_key_response
+          [
+            404,
+            { "Content-Type" => "application/xml" },
+            # TODO: need to figure out what the resource should be here.
+            XMLErrorResponse.new("NoSuchKey", "The specified key does not exist.", "")
+          ]
+        end
+
+        def file_path
+          @file_path ||= File.join(@directory, @env['PATH_INFO'])
+        end
+
+        def content_type
           metadata["Content-Type"] || "application/octet-stream"
+        end
+
+        def metadata
+          @metadata ||= metadata_storage.read_metadata
+        end
+
+        def metadata_storage
+          @metadata_storage ||= MetadataStorage.new(file_path)
         end
 
       end

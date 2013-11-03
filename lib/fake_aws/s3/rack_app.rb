@@ -19,8 +19,8 @@ module FakeAWS
             raise "Unhandled request method"  # TODO: Make a proper exception for this.
         end
 
-        operation = operation_class.new(@directory)
-        operation.call(env)
+        operation = operation_class.new(@directory, env)
+        operation.call
       end
     end
 
