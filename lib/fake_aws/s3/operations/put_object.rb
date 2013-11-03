@@ -1,4 +1,4 @@
-require 'fake_aws/s3/xml_response'
+require 'fake_aws/s3/xml_error_response'
 
 module FakeAWS
   module S3
@@ -32,7 +32,7 @@ module FakeAWS
             [
               404,
               { "Content-Type" => "application/xml" },
-              XMLResponse.new("NoSuchBucket", "The specified bucket does not exist.", "/#{bucket}")
+              XMLErrorResponse.new("NoSuchBucket", "The specified bucket does not exist.", "/#{bucket}")
             ]
           end
         end

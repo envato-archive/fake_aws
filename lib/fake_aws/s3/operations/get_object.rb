@@ -1,4 +1,4 @@
-require 'fake_aws/s3/xml_response'
+require 'fake_aws/s3/xml_error_response'
 
 module FakeAWS
   module S3
@@ -24,7 +24,7 @@ module FakeAWS
               404,
               { "Content-Type" => "application/xml" },
               # TODO: need to figure out what the resource should be here.
-              XMLResponse.new("NoSuchKey", "The specified key does not exist.", "")
+              XMLErrorResponse.new("NoSuchKey", "The specified key does not exist.", "")
             ]
           end
         end

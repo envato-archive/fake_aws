@@ -1,8 +1,7 @@
 module FakeAWS
   module S3
 
-    # TODO: This is a misnomer. It actually only does XML error responses.
-    class XMLResponse
+    class XMLErrorResponse
       def initialize(code, message, resource)
         @code = code
         @message = message
