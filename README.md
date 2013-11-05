@@ -1,6 +1,11 @@
 # FakeAWS
 
-TODO: Write a gem description
+A minimal implementation of AWS as a Rack app, for testing and development.
+
+This is still in the very early stages of development.
+
+So far there's only a tiny bit of S3 implemented, but it's well tested and
+designed to be easy to extend. Pull requests for more features are welcome.
 
 ## Installation
 
@@ -27,3 +32,11 @@ TODO: Write usage instructions here
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
+
+## To Do
+
+- Handle bucket names in the host as well as the path
+- Spit out a properly formatted response on a successful PUT object operation
+- Complete the missing fields in XML error responses
+- Check signing of requests
+- Handle PUT Object copy requests
