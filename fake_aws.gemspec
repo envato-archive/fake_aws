@@ -8,9 +8,9 @@ Gem::Specification.new do |spec|
   spec.version       = FakeAWS::VERSION
   spec.authors       = ["Pete Yandell", "Luke Arndt"]
   spec.email         = ["pete@notahat.com", "luke@arndt.io"]
-  spec.description   = %q{TODO: Write a gem description}
-  spec.summary       = %q{TODO: Write a gem summary}
-  spec.homepage      = ""
+  spec.description   = %q{A subset of AWS as a Rack app, for dev and testing}
+  spec.summary       = %q{A subset of AWS (so far just a small proportion of S3) implemented as a Rack app, useful for development and testing.}
+  spec.homepage      = "https://github.com/envato/fake_aws"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files`.split($/)
