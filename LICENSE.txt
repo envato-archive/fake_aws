@@ -1,4 +1,4 @@
-Copyright (c) 2013 Pete Yandell
+Copyright (c) 2013 Envato, Pete Yandell & Luke Arndt
 
 MIT License
 
