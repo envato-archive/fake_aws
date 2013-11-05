@@ -1,4 +1,4 @@
-require 'fake_aws/s3/object_store'
+require 'spec_helper'
 
 describe FakeAWS::S3::ObjectStore do
   let(:root_directory)     { "tmp" }

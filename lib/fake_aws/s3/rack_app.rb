@@ -1,6 +1,3 @@
-require 'fake_aws/s3/operations/get_object'
-require 'fake_aws/s3/operations/put_object'
-
 module FakeAWS
   module S3
 

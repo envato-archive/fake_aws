@@ -1,6 +1,3 @@
-require 'fake_aws/s3/xml_error_response'
-require 'fake_aws/s3/object_store'
-
 module FakeAWS
   module S3
     module Operations

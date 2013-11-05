@@ -1,5 +1,6 @@
 require "fake_aws/version"
-
-module FakeAWS
-  # Your code goes here...
-end
+require "fake_aws/s3/object_store"
+require "fake_aws/s3/rack_app"
+require "fake_aws/s3/xml_error_response"
+require "fake_aws/s3/operations/get_object"
+require "fake_aws/s3/operations/put_object"

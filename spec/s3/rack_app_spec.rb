@@ -1,4 +1,4 @@
-require 'fake_aws/s3/rack_app'
+require 'spec_helper'
 require 'faraday'
 require 'rack/test'
 require 'json'
