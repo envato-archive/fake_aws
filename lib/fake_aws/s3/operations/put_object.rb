@@ -1,21 +1,20 @@
 require 'fake_aws/s3/xml_error_response'
+require 'fake_aws/s3/object_store'
 
 module FakeAWS
   module S3
     module Operations
 
       class PutObject
-        def initialize(directory, env)
-          @directory = directory
-          @env       = env
-
-          path_components = @env['PATH_INFO'].split("/")
-          _, @bucket, *@directories, @file_name = path_components
+        def initialize(root_directory, env)
+          @root_directory = root_directory
+          @env            = env
         end
 
         def call
-          if Dir.exists?(bucket_path)
-            write_data
+          # TODO: Bit of a tell-don't-ask violation here. Can it be fixed?
+          if object_store.bucket_exists?
+            object_store.write_object(content, metadata)
             success_response
           else
             no_such_bucket_response
@@ -24,29 +23,11 @@ module FakeAWS
 
       private
 
-        def write_data
-          make_enclosing_directory
-          write_file
-          write_metadata
-        end
-
-        def make_enclosing_directory
-          FileUtils.mkdir_p(directory_path)
-        end
-
-        def write_file
-          File.write(file_path, file_contents)
-        end
-
-        def write_metadata
-          metadata_storage.write_metadata(metadata)
-        end
-
         def success_response
           [
             200,
-            {'Content-Type' => 'application/xml'},
-            ["hello world"]
+            { "Content-Type" => "application/xml" },
+            ["hello world"]  # TODO: Uh huh.
           ]
         end
 
@@ -54,28 +35,16 @@ module FakeAWS
           [
             404,
             { "Content-Type" => "application/xml" },
-            XMLErrorResponse.new("NoSuchBucket", "The specified bucket does not exist.", "/#{bucket}")
+            XMLErrorResponse.new(
+              "NoSuchBucket",
+              "The specified bucket does not exist.",
+              "/#{object_store.bucket}"
+            )
           ]
         end
 
-        def file_contents
+        def content
           @env["rack.input"].read
-        end
-
-        def bucket_path
-          @bucket_path ||= File.join(@directory, bucket)
-        end
-
-        def directory_path
-          @directory_path ||= File.join(@directory, bucket, *directories)
-        end
-
-        def file_path
-          @file_path ||= File.join(@directory, @env['PATH_INFO'])
-        end
-
-        def metadata_storage
-          @metadata_storage ||= MetadataStorage.new(file_path)
         end
 
         def metadata
@@ -90,7 +59,9 @@ module FakeAWS
           end
         end
 
-        attr_reader :bucket, :directories, :file_name
+        def object_store
+          @object_store ||= ObjectStore.new(@root_directory, @env["PATH_INFO"])
+        end
 
       end
 

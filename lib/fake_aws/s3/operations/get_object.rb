@@ -1,17 +1,18 @@
 require 'fake_aws/s3/xml_error_response'
+require 'fake_aws/s3/object_store'
 
 module FakeAWS
   module S3
     module Operations
 
       class GetObject
-        def initialize(directory, env)
-          @directory = directory
-          @env       = env
+        def initialize(root_directory, env)
+          @root_directory = root_directory
+          @env            = env
         end
 
         def call
-          if File.exists?(file_path)
+          if object_store.object_exists?
             success_response
           else
             no_such_key_response
@@ -24,7 +25,7 @@ module FakeAWS
           [
             200,
             { "Content-Type" => content_type },
-            File.new(file_path)
+            object_store.read_object
           ]
         end
 
@@ -37,22 +38,17 @@ module FakeAWS
           ]
         end
 
-        def file_path
-          @file_path ||= File.join(@directory, @env['PATH_INFO'])
-        end
-
         def content_type
           metadata["Content-Type"] || "application/octet-stream"
         end
 
         def metadata
-          @metadata ||= metadata_storage.read_metadata
+          @metadata ||= object_store.read_metadata
         end
 
-        def metadata_storage
-          @metadata_storage ||= MetadataStorage.new(file_path)
+        def object_store
+          @object_store ||= ObjectStore.new(@root_directory, @env["PATH_INFO"])
         end
-
       end
 
     end
