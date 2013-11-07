@@ -35,7 +35,6 @@ TODO: Write usage instructions here
 
 ## To Do
 
-- Split up the rack app tests into separate files for the different operations
 - Handle bucket names in the host as well as the path
 - Spit out a properly formatted response on a successful PUT object operation
 - Complete the missing fields in XML error responses
