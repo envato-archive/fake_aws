@@ -2,10 +2,8 @@
 
 A minimal implementation of AWS as a Rack app, for testing and development.
 
-This is still in the very early stages of development.
+This is designed to pair nicely with [AWSRaw](https://github.com/envato/awsraw).
 
-So far there's only a tiny bit of S3 implemented, but it's well tested and
-designed to be easy to extend. Pull requests for more features are welcome.
 
 ## Installation
 
@@ -21,9 +19,52 @@ Or install it yourself as:
 
     $ gem install fake_aws
 
+
+## Status
+
+This is still in the very early stages of development.
+
+So far there's only a tiny bit of S3 implemented, but it's well tested and
+fairly easy to extend. Pull requests for more features are welcome.
+
+The S3 implementation only supports basic PUT Object and GET Object requests.
+The bucket name must be in the path, not the host.  No authentication or
+security is implemented.  `Content-Type` and `x-amz-metadata` headers are
+stored and returned. Responses may or may not be properly formatted.
+
+
 ## Usage
 
-TODO: Write usage instructions here
+The easiest way to try this out is with [Faraday](https://github.com/lostisland/faraday):
+
+```ruby
+connection = Faraday.new do |faraday|
+  faraday.adapter :rack, FakeAWS::S3::RackApp.new('root_directory')
+end
+```
+
+The root directory you provide is used to store S3 objects and metadata.
+
+For example, the following PUT Object request:
+
+```ruby
+connection.put do |request|
+  request.url("http://s3.amazonaws.com/test_bucket/test_path/test_file.txt")
+  request.headers["Content-Type"] = "text/plain"
+  request.body = "Hello, world!"
+end
+```
+
+will create a file `root_directory/test_bucket/test_path/test_file.txt`.
+
+(Note: `root_directory/test_bucket` must already exist! As there's no
+implementation of the Create Bucket operation yet, you'll need to make the
+directory for the bucket yourself before doing a PUT Object.)
+
+It will also create
+`root_directory/test_bucket/test_path/test_file.txt.metadata.json`, which holds
+the metadata for the file as a JSON hash.
+
 
 ## Contributing
 
