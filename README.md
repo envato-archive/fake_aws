@@ -20,7 +20,7 @@ Or install it yourself as:
     $ gem install fake_aws
 
 
-## Status
+## Status [![Build Status](https://travis-ci.org/envato/fake_aws.png)](https://travis-ci.org/envato/fake_aws)
 
 This is still in the very early stages of development.
 
