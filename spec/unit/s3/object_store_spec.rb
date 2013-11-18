@@ -16,6 +16,18 @@ describe FakeAWS::S3::ObjectStore do
     FileUtils.mkdir_p(bucket_path)
   end
 
+  describe "#bucket" do
+    it "returns the bucket" do
+      expect(subject.bucket).to eq("mah-bucket")
+    end
+  end
+
+  describe "#key" do
+    it "returns the key" do
+      expect(subject.key).to eq("/mah-file.txt")
+    end
+  end
+
   describe "#bucket_exists?" do
     it "returns true if the bucket directory exists" do
       expect(subject.bucket_exists?).to be_true

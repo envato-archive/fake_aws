@@ -1,5 +1,3 @@
-require 'finer_struct'
-
 module FakeAWS
   module S3
 
