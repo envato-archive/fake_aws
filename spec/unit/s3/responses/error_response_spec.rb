@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'nori'
 
 describe FakeAWS::S3::Responses::ErrorResponse do
 
@@ -14,22 +13,14 @@ describe FakeAWS::S3::Responses::ErrorResponse do
 
   subject { described_class.new(error, resource) }
 
+  include_examples "common response headers"
+
   it "has the right status code" do
     expect(subject.status_code).to eq(error.status_code)
   end
 
   it "has a content type of XML" do
     expect(subject.headers["Content-Type"]).to eq("application/xml")
-  end
-
-  it "has a Date header" do
-    time = Time.parse("2013-11-18 17:45")
-    Time.stub(:now => time)
-    expect(subject.headers["Date"]).to eq(time.httpdate)
-  end
-
-  it "has a Server header" do
-    expect(subject.headers["Server"]).to eq("AmazonS3")
   end
 
   context "body" do

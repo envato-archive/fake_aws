@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe "S3 GET Object operation" do
-  include S3IntegrationSpecHelpers
+  include S3IntegrationHelpers
   include XMLParsingHelper
 
   let(:bucket)        { "mah-bucket" }
