@@ -16,6 +16,10 @@ module FakeAWS
         request_parser.bucket
       end
 
+      def key
+        request_parser.key
+      end
+
       def bucket_exists?
         Dir.exists?(bucket_path)
       end
@@ -58,10 +62,6 @@ module FakeAWS
 
       def directory_path
         @directory_path ||= File.join(@root_directory, bucket, File.dirname(key))
-      end
-
-      def key
-        request_parser.key
       end
 
       def request_parser
