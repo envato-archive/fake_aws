@@ -2,6 +2,7 @@ require 'spec_helper'
 
 describe "S3 GET Object operation" do
   include S3IntegrationSpecHelpers
+  include XMLParsingHelper
 
   let(:bucket)        { "mah-bucket" }
   let(:file_name)     { "mah-file.txt"}
@@ -17,12 +18,10 @@ describe "S3 GET Object operation" do
       File.write(File.join(s3_path, bucket, file_name), file_contents)
     end
 
-    it "returns a 200" do
+    it "returns a successful response" do
       response = get_example_file(file_name)
       expect(response.status).to eq(200)
     end
-
-    it "returns a correctly constructed response"
 
     it "returns the contents of the file" do
       response = get_example_file(file_name)
@@ -45,12 +44,11 @@ describe "S3 GET Object operation" do
       FileUtils.mkdir(File.join(s3_path, bucket))
     end
 
-    it "returns a 404" do
+    it "returns a NoSuchKey error" do
       response = get_example_file(file_name)
       expect(response.status).to eq(404)
+      expect(parse_xml(response.body)["Error"]["Code"]).to eq("NoSuchKey")
     end
-
-    it "returns the correct XML response"
   end
 
   context "with a bucket that doesn't exist" do

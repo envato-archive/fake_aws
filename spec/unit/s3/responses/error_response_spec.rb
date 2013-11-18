@@ -33,8 +33,9 @@ describe FakeAWS::S3::Responses::ErrorResponse do
   end
 
   context "body" do
-    let(:parser)      { Nori.new(:parser => :rexml) }
-    let(:parsed_body) { parser.parse(subject.body) }
+    include XMLParsingHelper
+
+    let(:parsed_body) { parse_xml(subject.body) }
 
     it "contains the right code" do
       expect(parsed_body["Error"]["Code"]).to eq(error.error_code)
