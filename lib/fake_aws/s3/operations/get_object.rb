@@ -23,7 +23,7 @@ module FakeAWS
         end
 
         def no_such_key_response
-          Responses::ErrorResponse.new(Responses::Error::NO_SUCH_KEY, "/#{object_store.key}")
+          Responses::ErrorResponse.new(Responses::Error::NO_SUCH_KEY, object_store.key)
         end
 
         def content_type

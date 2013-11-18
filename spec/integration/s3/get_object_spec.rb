@@ -49,6 +49,11 @@ describe "S3 GET Object operation" do
       expect(response.status).to eq(404)
       expect(parse_xml(response.body)["Error"]["Code"]).to eq("NoSuchKey")
     end
+
+    it "returns the key as the resource" do
+      response = get_example_file(file_name)
+      expect(parse_xml(response.body)["Error"]["Resource"]).to eq("/#{file_name}")
+    end
   end
 
   context "with a bucket that doesn't exist" do
