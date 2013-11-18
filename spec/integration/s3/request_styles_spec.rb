@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe "Request styles:" do
-  include S3IntegrationSpecHelpers
+  include S3IntegrationHelpers
 
   let(:bucket)        { "mah-bucket" }
   let(:file_name)     { "mah-file.txt"}

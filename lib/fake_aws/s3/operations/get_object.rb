@@ -19,20 +19,11 @@ module FakeAWS
       private
 
         def success_response
-          [
-            200,
-            { "Content-Type" => content_type },
-            object_store.read_object
-          ]
+          Responses::SuccessResponse.new(content_type, object_store.read_object)
         end
 
         def no_such_key_response
-          [
-            404,
-            { "Content-Type" => "application/xml" },
-            # TODO: need to figure out what the resource should be here.
-            XMLErrorResponse.new("NoSuchKey", "The specified key does not exist.", "")
-          ]
+          Responses::ErrorResponse.new(Responses::Error::NO_SUCH_KEY, object_store.key)
         end
 
         def content_type

@@ -1,7 +1,8 @@
 require 'spec_helper'
 
 describe "S3 PUT Object operation" do
-  include S3IntegrationSpecHelpers
+  include S3IntegrationHelpers
+  include XMLParsingHelper
 
   let(:bucket)        { "mah-bucket" }
   let(:file_name)     { "mah-file.txt"}
@@ -31,7 +32,10 @@ describe "S3 PUT Object operation" do
       expect(response.status).to eq(200)
     end
 
-    it "returns a correctly constructed response"
+    it "returns a response with an empty body" do
+      response = put_example_file(file_name)
+      expect(response.body).to be_empty
+    end
 
     it "creates a file" do
       put_example_file(file_name)
@@ -65,12 +69,11 @@ describe "S3 PUT Object operation" do
   end
 
   context "without an existing bucket" do
-    it "returns a 404" do
+    it "returns a No Such Bucket error" do
       response = put_example_file(file_name)
       expect(response.status).to eq(404)
+      expect(parse_xml(response.body)["Error"]["Code"]).to eq("NoSuchBucket")
     end
-
-    it "returns the correct XML response"
   end
 
 end
