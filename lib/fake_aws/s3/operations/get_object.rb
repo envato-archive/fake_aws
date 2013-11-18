@@ -44,7 +44,7 @@ module FakeAWS
         end
 
         def object_store
-          @object_store ||= ObjectStore.new(@root_directory, @env["PATH_INFO"])
+          @object_store ||= ObjectStore.new(@root_directory, @env["SERVER_NAME"], @env["PATH_INFO"])
         end
       end
 

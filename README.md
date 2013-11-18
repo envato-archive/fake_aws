@@ -76,7 +76,6 @@ the metadata for the file as a JSON hash.
 
 ## To Do
 
-- Handle bucket names in the host as well as the path
 - Spit out a properly formatted response on a successful PUT object operation
 - Complete the missing fields in XML error responses
 - Check signing of requests

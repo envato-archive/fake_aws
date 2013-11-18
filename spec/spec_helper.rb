@@ -7,7 +7,7 @@ module S3IntegrationSpecHelpers
     base.let(:s3_path) { "tmp" }
 
     base.let(:connection) do
-      Faraday.new do |connection|
+      Faraday.new("http://s3.amazonaws.com") do |connection|
         connection.adapter :rack, FakeAWS::S3::RackApp.new(s3_path)
       end
     end

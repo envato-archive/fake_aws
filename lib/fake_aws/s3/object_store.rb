@@ -6,15 +6,15 @@ module FakeAWS
     # Read and write S3 objects and metadata about them in the filesystem.
     class ObjectStore
 
-      def initialize(root_directory, path_info)
+      def initialize(root_directory, server_name, path_info)
         @root_directory = root_directory
-        @path_info = path_info
-
-        path_components = @path_info.split("/")
-        _, @bucket, *@directories, @file_name = path_components
+        @server_name    = server_name
+        @path_info      = path_info
       end
 
-      attr_reader :bucket
+      def bucket
+        request_parser.bucket
+      end
 
       def bucket_exists?
         Dir.exists?(bucket_path)
@@ -45,19 +45,27 @@ module FakeAWS
     private
 
       def bucket_path
-        @bucket_path ||= File.join(@root_directory, @bucket)
+        @bucket_path ||= File.join(@root_directory, bucket)
       end
 
       def file_path
-        @file_path ||= File.join(@root_directory, @path_info)
+        @file_path ||= File.join(bucket_path, key)
       end
 
       def metadata_file_path
-        "#{file_path}.metadata.json"
+        @metadata_file_path ||= "#{file_path}.metadata.json"
       end
 
       def directory_path
-        @directory_path ||= File.join(@root_directory, @bucket, *@directories)
+        @directory_path ||= File.join(@root_directory, bucket, File.dirname(key))
+      end
+
+      def key
+        request_parser.key
+      end
+
+      def request_parser
+        @request_parser ||= RequestParser.new(@server_name, @path_info)
       end
 
     end
