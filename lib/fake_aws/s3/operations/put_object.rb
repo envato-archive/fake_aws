@@ -1,5 +1,8 @@
+require 'finer_struct'
+
 module FakeAWS
   module S3
+
     module Operations
 
       class PutObject
@@ -21,23 +24,14 @@ module FakeAWS
       private
 
         def success_response
-          [
-            200,
-            { "Content-Type" => "application/xml" },
-            ["hello world"]  # TODO: Uh huh.
-          ]
+          Responses::EmptyResponse.new
         end
 
         def no_such_bucket_response
-          [
-            404,
-            { "Content-Type" => "application/xml" },
-            XMLErrorResponse.new(
-              "NoSuchBucket",
-              "The specified bucket does not exist.",
-              "/#{object_store.bucket}"
-            )
-          ]
+          Responses::ErrorResponse.new(
+            Responses::Error::NO_SUCH_BUCKET,
+            "/#{object_store.bucket}"
+          )
         end
 
         def content

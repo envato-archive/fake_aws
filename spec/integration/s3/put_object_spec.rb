@@ -31,7 +31,10 @@ describe "S3 PUT Object operation" do
       expect(response.status).to eq(200)
     end
 
-    it "returns a correctly constructed response"
+    it "returns a response with an empty body" do
+      response = put_example_file(file_name)
+      expect(response.body).to be_empty
+    end
 
     it "creates a file" do
       put_example_file(file_name)
