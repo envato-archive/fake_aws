@@ -18,7 +18,7 @@ module FakeAWS
 
         operation = operation_class.new(@directory, env)
         response  = operation.call
-        response.to_a
+        response.to_rack_response
       end
     end
 

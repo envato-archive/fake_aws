@@ -68,12 +68,11 @@ describe "S3 PUT Object operation" do
   end
 
   context "without an existing bucket" do
-    it "returns a 404" do
+    it "returns a No Such Bucket error" do
       response = put_example_file(file_name)
       expect(response.status).to eq(404)
+      pending "Check the XML responsse for the right error code and resource"
     end
-
-    it "returns the correct XML response"
   end
 
 end
