@@ -11,8 +11,10 @@ module FakeAWS
         def call
           if object_store.object_exists?
             success_response
-          else
+          elsif object_store.bucket_exists?
             no_such_key_response
+          else
+            no_such_bucket_response
           end
         end
 
@@ -22,8 +24,12 @@ module FakeAWS
           Responses::Success.new(content_type, object_store.read_object)
         end
 
+        def no_such_bucket_response
+          Responses::Error.new("NoSuchBucket", "BucketName" => object_store.bucket)
+        end
+
         def no_such_key_response
-          Responses::Error.new("NoSuchKey", object_store.key)
+          Responses::Error.new("NoSuchKey", "Resource" => object_store.key)
         end
 
         def content_type

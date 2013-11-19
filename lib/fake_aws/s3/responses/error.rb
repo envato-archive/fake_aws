@@ -5,9 +5,9 @@ module FakeAWS
       class Error
         include Common
 
-        def initialize(error_code, resource)
+        def initialize(error_code, fields = {})
           @error_code = error_code
-          @resource = resource
+          @fields     = fields
         end
 
         def status_code
@@ -25,7 +25,11 @@ module FakeAWS
 
             xml << "  <Code>#{@error_code}</Code>"
             xml << "  <Message>#{error.description}</Message>"
-            xml << "  <Resource>#{@resource}</Resource>"
+
+            @fields.each_pair do |key, value|
+              xml << "  <#{key}>#{value}</#{key}>"
+            end
+
             xml << "  <RequestId>#{request_id}</RequestId>"
 
             xml << %q{</Error>}
