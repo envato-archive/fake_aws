@@ -19,11 +19,11 @@ module FakeAWS
       private
 
         def success_response
-          Responses::SuccessResponse.new(content_type, object_store.read_object)
+          Responses::Success.new(content_type, object_store.read_object)
         end
 
         def no_such_key_response
-          Responses::ErrorResponse.new(Responses::Error::NO_SUCH_KEY, object_store.key)
+          Responses::Error.new("NoSuchKey", object_store.key)
         end
 
         def content_type

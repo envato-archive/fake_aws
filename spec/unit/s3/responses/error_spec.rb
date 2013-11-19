@@ -1,17 +1,16 @@
 require 'spec_helper'
 
-describe FakeAWS::S3::Responses::ErrorResponse do
+describe FakeAWS::S3::Responses::Error do
 
-  let(:error) do
-    FinerStruct::Immutable.new(
-      :error_code  => "NoSuchKey",
-      :description => "The specified key does not exist.",
-      :status_code => 404
-    )
-  end
+  # Stub out looking up the error information:
+  let(:error_code)  { "NoSuchKey" }
+  let(:error)       { double(:description => "The specified key does not exist.", :status_code => 404) }
+  let(:error_index) { double(:error_for_code => error) }
+  before            { stub_const("FakeAWS::S3::ErrorIndex", error_index) }
+
   let(:resource) { "/mah-bucket/mah-object.txt" }
 
-  subject { described_class.new(error, resource) }
+  subject { described_class.new(error_code, resource) }
 
   include_examples "common response headers"
 
@@ -29,7 +28,7 @@ describe FakeAWS::S3::Responses::ErrorResponse do
     let(:parsed_body) { parse_xml(subject.body) }
 
     it "contains the right code" do
-      expect(parsed_body["Error"]["Code"]).to eq(error.error_code)
+      expect(parsed_body["Error"]["Code"]).to eq(error_code)
     end
 
     it "contains the right message" do
