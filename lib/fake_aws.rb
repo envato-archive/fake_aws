@@ -1,4 +1,5 @@
 require "fake_aws/version"
+require "fake_aws/error"
 require "fake_aws/s3/error_index"
 require "fake_aws/s3/object_store"
 require "fake_aws/s3/rack_app"

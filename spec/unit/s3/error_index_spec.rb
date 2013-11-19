@@ -10,7 +10,7 @@ describe FakeAWS::S3::ErrorIndex do
     end
 
     it "blows up if given an unknown error code" do
-      expect { subject.error_for_code("NotARealCode") }.to raise_error(
+      expect { subject.error_for_code("NotARealCode") }.to raise_error(FakeAWS::UnknownResponseErrorCode)
     end
   end
 

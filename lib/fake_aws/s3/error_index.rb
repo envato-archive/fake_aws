@@ -10,7 +10,7 @@ module FakeAWS
       class Error < FinerStruct::Immutable(:description, :status_code); end
 
       def self.error_for_code(error_code)
-        errors[error_code] || raise("Attempting to return an unknown S3 error")
+        errors[error_code] || raise(FakeAWS::UnknownResponseErrorCode)
       end
 
     private
