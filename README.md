@@ -75,9 +75,8 @@ the metadata for the file as a JSON hash.
 
 ## To Do
 
-- Spit out a properly formatted response on a successful PUT object operation
-- Complete the missing fields in XML error responses
+- Return user metadata on GET Object requests
+- Handle PUT Object Copy requests
 - Check signing of requests
-- Handle PUT Object copy requests
 
 
