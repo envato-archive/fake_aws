@@ -4,8 +4,8 @@ describe FakeAWS::S3::Responses::Error do
 
   # Stub out looking up the error information:
   let(:error_code)  { "NoSuchKey" }
-  let(:error)       { stub(:description => "The specified key does not exist.", :status_code => 404) }
-  let(:error_index) { stub(:error_for_code => error) }
+  let(:error)       { double(:description => "The specified key does not exist.", :status_code => 404) }
+  let(:error_index) { double(:error_for_code => error) }
   before            { stub_const("FakeAWS::S3::ErrorIndex", error_index) }
 
   let(:resource) { "/mah-bucket/mah-object.txt" }
