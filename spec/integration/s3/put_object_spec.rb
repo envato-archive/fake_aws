@@ -74,6 +74,11 @@ describe "S3 PUT Object operation" do
       expect(response.status).to eq(404)
       expect(parse_xml(response.body)["Error"]["Code"]).to eq("NoSuchBucket")
     end
+
+    it "returns the bucket name" do
+      response = put_example_file(file_name)
+      expect(parse_xml(response.body)["Error"]["BucketName"]).to eq(bucket)
+    end
   end
 
 end

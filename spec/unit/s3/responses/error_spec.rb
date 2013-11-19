@@ -10,7 +10,7 @@ describe FakeAWS::S3::Responses::Error do
 
   let(:resource) { "/mah-bucket/mah-object.txt" }
 
-  subject { described_class.new(error_code, resource) }
+  subject { described_class.new(error_code, "Resource" => resource) }
 
   include_examples "common response headers"
 
@@ -35,11 +35,13 @@ describe FakeAWS::S3::Responses::Error do
       expect(parsed_body["Error"]["Message"]).to eq(error.description)
     end
 
-    it "contains the right resource" do
+    it "contains any additional fields passed in" do
       expect(parsed_body["Error"]["Resource"]).to eq(resource)
     end
 
-    it "contains the right request ID"
+    it "contains the right request ID" do
+      expect(parsed_body["Error"]["RequestId"]).to eq(subject.headers["x-amz-request-id"])
+    end
   end
 
 end

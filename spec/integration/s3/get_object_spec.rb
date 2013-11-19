@@ -57,8 +57,15 @@ describe "S3 GET Object operation" do
   end
 
   context "with a bucket that doesn't exist" do
-    it "returns the right sort of error" do
-      pending "Need to figure out what error AWS actually returns for this case"
+    it "returns a NoSuchBucket error" do
+      response = get_example_file(file_name)
+      expect(response.status).to eq(404)
+      expect(parse_xml(response.body)["Error"]["Code"]).to eq("NoSuchBucket")
+    end
+
+    it "returns the bucket name" do
+      response = get_example_file(file_name)
+      expect(parse_xml(response.body)["Error"]["BucketName"]).to eq(bucket)
     end
   end
 

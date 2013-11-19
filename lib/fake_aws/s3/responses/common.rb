@@ -1,3 +1,5 @@
+require 'securerandom'
+
 module FakeAWS
   module S3
     module Responses
@@ -8,8 +10,9 @@ module FakeAWS
         # Headers which should be included in all S3 responses.
         def common_headers
           {
-            "Date"         => Time.now.httpdate,
-            "Server"       => "AmazonS3"
+            "Date"             => Time.now.httpdate,
+            "Server"           => "AmazonS3",
+            "x-amz-request-id" => request_id
           }
         end
 
@@ -19,6 +22,12 @@ module FakeAWS
             headers,
             body
           ]
+        end
+
+      protected
+
+        def request_id
+          @request_id ||= SecureRandom.hex(8)
         end
 
       end
