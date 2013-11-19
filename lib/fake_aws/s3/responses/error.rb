@@ -15,7 +15,7 @@ module FakeAWS
         end
 
         def headers
-          common_headers.merge("Content-Type" => "application/xml")
+          @headers ||= common_headers.merge("Content-Type" => "application/xml")
         end
 
         def body
@@ -26,7 +26,7 @@ module FakeAWS
             xml << "  <Code>#{@error_code}</Code>"
             xml << "  <Message>#{error.description}</Message>"
             xml << "  <Resource>#{@resource}</Resource>"
-            xml << "  <RequestId></RequestId>"
+            xml << "  <RequestId>#{request_id}</RequestId>"
 
             xml << %q{</Error>}
           end

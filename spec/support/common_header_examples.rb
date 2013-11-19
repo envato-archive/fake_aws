@@ -10,5 +10,7 @@ shared_examples "common response headers" do
     expect(subject.headers["Server"]).to eq("AmazonS3")
   end
 
-  it "has request ID headers"
+  it "has a request ID" do
+    expect(subject.headers["x-amz-request-id"]).to_not be_blank
+  end
 end

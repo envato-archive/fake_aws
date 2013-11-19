@@ -39,7 +39,9 @@ describe FakeAWS::S3::Responses::Error do
       expect(parsed_body["Error"]["Resource"]).to eq(resource)
     end
 
-    it "contains the right request ID"
+    it "contains the right request ID" do
+      expect(parsed_body["Error"]["RequestId"]).to eq(subject.headers["x-amz-request-id"])
+    end
   end
 
 end
