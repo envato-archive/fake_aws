@@ -26,10 +26,7 @@ module FakeAWS
         end
 
         def no_such_bucket_response
-          Responses::ErrorResponse.new(
-            Responses::Error::NO_SUCH_BUCKET,
-            "/#{object_store.bucket}"
-          )
+          Responses::ErrorResponse.new("NoSuchBucket", "/#{object_store.bucket}")
         end
 
         def content
