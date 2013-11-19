@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe FakeAWS::S3::Responses::SuccessResponse do
+describe FakeAWS::S3::Responses::Success do
 
   let(:content_type) { "text/plain" }
   let(:body)         { "Hello, world!" }

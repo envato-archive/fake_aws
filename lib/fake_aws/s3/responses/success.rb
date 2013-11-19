@@ -2,7 +2,7 @@ module FakeAWS
   module S3
     module Responses
 
-      class SuccessResponse
+      class Success
         include Common
 
         def initialize(content_type, body)

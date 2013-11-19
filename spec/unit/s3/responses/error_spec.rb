@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe FakeAWS::S3::Responses::ErrorResponse do
+describe FakeAWS::S3::Responses::Error do
 
   # Stub out looking up the error information:
   let(:error_code)  { "NoSuchKey" }

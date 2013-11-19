@@ -22,11 +22,11 @@ module FakeAWS
       private
 
         def success_response
-          Responses::EmptyResponse.new
+          Responses::Empty.new
         end
 
         def no_such_bucket_response
-          Responses::ErrorResponse.new("NoSuchBucket", "/#{object_store.bucket}")
+          Responses::Error.new("NoSuchBucket", "/#{object_store.bucket}")
         end
 
         def content

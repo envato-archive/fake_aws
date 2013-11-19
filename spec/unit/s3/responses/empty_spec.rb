@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe FakeAWS::S3::Responses::EmptyResponse do
+describe FakeAWS::S3::Responses::Empty do
   include_examples "common response headers"
 
   it "has a status code of 200" do

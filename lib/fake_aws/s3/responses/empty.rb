@@ -2,7 +2,7 @@ module FakeAWS
   module S3
     module Responses
 
-      class EmptyResponse
+      class Empty
         include Common
 
         def status_code

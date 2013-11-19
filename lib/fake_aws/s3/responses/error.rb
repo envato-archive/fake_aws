@@ -2,7 +2,7 @@ module FakeAWS
   module S3
     module Responses
 
-      class ErrorResponse
+      class Error
         include Common
 
         def initialize(error_code, resource)
