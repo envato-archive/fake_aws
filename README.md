@@ -28,9 +28,8 @@ So far there's only a tiny bit of S3 implemented, but it's well tested and
 fairly easy to extend. Pull requests for more features are welcome.
 
 The S3 implementation only supports basic PUT Object and GET Object requests.
-The bucket name must be in the path, not the host.  No authentication or
-security is implemented.  `Content-Type` and `x-amz-metadata` headers are
-stored and returned. Responses may or may not be properly formatted.
+No authentication or security is implemented.  `Content-Type` and
+`x-amz-metadata` headers are stored and returned.
 
 
 ## Usage
