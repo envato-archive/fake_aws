@@ -10,13 +10,10 @@ module FakeAWS
         end
 
         def call
-          # TODO: Bit of a tell-don't-ask violation here. Can it be fixed?
-          if object_store.bucket_exists?
-            object_store.write_object(content, metadata)
-            success_response
-          else
-            no_such_bucket_response
-          end
+          return no_such_bucket_response unless object_store.bucket_exists?
+
+          object_store.write_object(content, metadata)
+          success_response
         end
 
       private

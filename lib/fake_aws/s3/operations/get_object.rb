@@ -9,13 +9,10 @@ module FakeAWS
         end
 
         def call
-          if object_store.object_exists?
-            success_response
-          elsif object_store.bucket_exists?
-            no_such_key_response
-          else
-            no_such_bucket_response
-          end
+          return no_such_bucket_response unless object_store.bucket_exists?
+          return no_such_key_response    unless object_store.object_exists?
+
+          success_response
         end
 
       private
