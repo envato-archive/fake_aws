@@ -31,15 +31,23 @@ module FakeAWS
         end
 
         def metadata
-          @metadata ||= {}.tap do |metadata|
-            metadata["Content-Type"] = @env['CONTENT_TYPE']
+          @metadata ||= [content_type_metadata, user_metadata].inject(:merge)
+        end
 
-            user_metadata_env_keys = @env.keys.select {|key| key =~ /^HTTP_X_AMZ_META_/ }
-            user_metadata_env_keys.each do |env_key|
-              metadata_key = env_key.sub(/^HTTP_/, "").gsub("_", "-").downcase
-              metadata[metadata_key] = @env[env_key]
-            end
-          end
+        def content_type_metadata
+          { "Content-Type" => @env["CONTENT_TYPE"] }
+        end
+
+        def user_metadata
+          http_headers.select {|key, _| key.start_with?("x-amz-meta-") }
+        end
+
+        def http_headers
+          env_helper.http_headers
+        end
+
+        def env_helper
+          @env_helper ||= EnvHelper.new(@env)
         end
 
         def object_store
