@@ -18,6 +18,8 @@ module FakeAWS
 
       private
 
+        extend Forwardable
+
         def success_response
           Responses::Empty.new
         end
@@ -42,9 +44,7 @@ module FakeAWS
           http_headers.select {|key, _| key.start_with?("x-amz-meta-") }
         end
 
-        def http_headers
-          env_helper.http_headers
-        end
+        def_delegator :env_helper, :http_headers
 
         def env_helper
           @env_helper ||= EnvHelper.new(@env)
