@@ -7,19 +7,26 @@ module FakeAWS
       end
 
       def call(env)
-        operation_class = case env["REQUEST_METHOD"]
+        operation_for(env).call.to_rack_response
+      end
+
+    private
+
+      def operation_for(env)
+        operation_class(env).new(@directory, env)
+      end
+
+      def operation_class(env)
+        case env["REQUEST_METHOD"]
           when "PUT"
             Operations::PutObject
           when "GET"
             Operations::GetObject
           else
-            raise "Unhandled request method"  # TODO: Make a proper exception for this.
+            raise FakeAWS::UnsupportedRequestError # TODO: This needs a spec.
         end
-
-        operation = operation_class.new(@directory, env)
-        response  = operation.call
-        response.to_rack_response
       end
+
     end
 
   end

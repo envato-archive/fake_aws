@@ -29,13 +29,16 @@ describe "S3 GET Object operation" do
     end
 
     it "returns the right content type" do
-      file_metadata = {
-        "Content-Type" => "text/plain"
-      }.to_json
+      file_metadata = { "Content-Type" => "text/plain" }.to_json
       File.write(File.join(s3_path, bucket, "#{file_name}.metadata.json"), file_metadata)
 
       response = get_example_file(file_name)
       expect(response.headers["Content-Type"]).to eq("text/plain")
+    end
+
+    it "returns a content type of application/octet-stream if none is set" do
+      response = get_example_file(file_name)
+      expect(response.headers["Content-Type"]).to eq("application/octet-stream")
     end
   end
 
