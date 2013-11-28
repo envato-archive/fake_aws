@@ -2,10 +2,10 @@ require 'spec_helper'
 
 describe FakeAWS::S3::Responses::Success do
 
-  let(:content_type) { "text/plain" }
-  let(:body)         { "Hello, world!" }
+  let(:headers) { { "Content-Type" => "text/plain" } }
+  let(:body)    { "Hello, world!" }
 
-  subject { described_class.new(content_type, body) }
+  subject { described_class.new(headers, body) }
 
   include_examples "common response headers"
 
@@ -18,7 +18,7 @@ describe FakeAWS::S3::Responses::Success do
   end
 
   it "has the right content type" do
-    expect(subject.headers["Content-Type"]).to eq(content_type)
+    expect(subject.headers["Content-Type"]).to eq("text/plain")
   end
 
 end

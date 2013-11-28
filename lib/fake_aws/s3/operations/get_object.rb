@@ -18,7 +18,7 @@ module FakeAWS
       private
 
         def success_response
-          Responses::Success.new(content_type, object_store.read_object)
+          Responses::Success.new(headers, object_store.read_object)
         end
 
         def no_such_bucket_response
@@ -29,8 +29,16 @@ module FakeAWS
           Responses::Error.new("NoSuchKey", "Resource" => object_store.key)
         end
 
-        def content_type
-          metadata["Content-Type"] || "application/octet-stream"
+        def headers
+          [content_type_header, user_headers].inject(:merge)
+        end
+
+        def user_headers
+          metadata.select {|key, _| key.start_with?("x-amz-meta-") }
+        end
+
+        def content_type_header
+          { "Content-Type" => metadata["Content-Type"] || "application/octet-stream" }
         end
 
         def metadata

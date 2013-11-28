@@ -8,6 +8,10 @@ describe "S3 GET Object operation" do
   let(:file_name)     { "mah-file.txt"}
   let(:file_contents) { "Hello, world!" }
 
+  def set_metadata(metadata)
+    File.write(File.join(s3_path, bucket, "#{file_name}.metadata.json"), metadata.to_json)
+  end
+
   def get_example_file(key)
     connection.get(File.join(bucket, key))
   end
@@ -29,8 +33,7 @@ describe "S3 GET Object operation" do
     end
 
     it "returns the right content type" do
-      file_metadata = { "Content-Type" => "text/plain" }.to_json
-      File.write(File.join(s3_path, bucket, "#{file_name}.metadata.json"), file_metadata)
+      set_metadata("Content-Type" => "text/plain")
 
       response = get_example_file(file_name)
       expect(response.headers["Content-Type"]).to eq("text/plain")
@@ -39,6 +42,13 @@ describe "S3 GET Object operation" do
     it "returns a content type of application/octet-stream if none is set" do
       response = get_example_file(file_name)
       expect(response.headers["Content-Type"]).to eq("application/octet-stream")
+    end
+
+    it "returns x-amz-meta-* headers from the metadata" do
+      set_metadata("x-amz-meta-foo" => "bar")
+
+      response = get_example_file(file_name)
+      expect(response.headers["x-amz-meta-foo"]).to eq("bar")
     end
   end
 

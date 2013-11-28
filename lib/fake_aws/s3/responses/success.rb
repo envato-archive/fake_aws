@@ -5,9 +5,9 @@ module FakeAWS
       class Success
         include Common
 
-        def initialize(content_type, body)
-          @content_type = content_type
-          @body         = body
+        def initialize(headers, body)
+          @headers = headers
+          @body    = body
         end
 
         def status_code
@@ -15,9 +15,7 @@ module FakeAWS
         end
 
         def headers
-          common_headers.merge(
-            "Content-Type" => @content_type
-          )
+          common_headers.merge(@headers)
         end
 
         def body
