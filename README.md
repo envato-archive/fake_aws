@@ -75,7 +75,6 @@ the metadata for the file as a JSON hash.
 
 ## To Do
 
-- Return user metadata on GET Object requests
 - Handle PUT Object Copy requests
 - Check signing of requests
 
