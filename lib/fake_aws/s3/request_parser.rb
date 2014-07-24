@@ -34,6 +34,10 @@ module FakeAWS
         end
       end
 
+      def has_key?
+        key != "/"
+      end
+
     private
 
       def request_style

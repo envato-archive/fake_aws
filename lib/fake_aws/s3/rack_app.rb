@@ -17,9 +17,15 @@ module FakeAWS
       end
 
       def operation_class(env)
+        request_parser = RequestParser.new(env["SERVER_NAME"], env["PATH_INFO"])
+
         case env["REQUEST_METHOD"]
           when "PUT"
-            Operations::PutObject
+            if request_parser.has_key?
+              Operations::PutObject
+            else
+              Operations::PutBucket
+            end
           when "GET"
             Operations::GetObject
           else

@@ -24,6 +24,10 @@ module FakeAWS
         Dir.exists?(bucket_path)
       end
 
+      def create_bucket
+        FileUtils.mkdir_p(bucket_path)
+      end
+
       def object_exists?
         File.exists?(file_path)
       end

@@ -39,6 +39,14 @@ describe FakeAWS::S3::ObjectStore do
     end
   end
 
+  describe "#create_bucket" do
+    it "creates the bucket directory" do
+      FileUtils.rmdir(bucket_path)
+      subject.create_bucket
+      expect(Dir.exists?(bucket_path)).to be_true
+    end
+  end
+
   describe "#object_exists?" do
     it "returns true if the object file exists" do
       File.write(object_file_path, "Hello, world!")

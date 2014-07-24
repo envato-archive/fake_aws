@@ -24,6 +24,10 @@ module FakeAWS
           "NoSuchKey" => Error.new(
             :description => "The specified key does not exist.",
             :status_code => 404
+          ),
+          "BucketAlreadyExists" => Error.new(
+            :description => "The requested bucket name is not available. The bucket namespace is shared by all users of the system. Please select a different name and try again.",
+            :status_code => 409
           )
         }
       end
