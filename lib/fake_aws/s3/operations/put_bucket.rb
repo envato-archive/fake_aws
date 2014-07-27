@@ -4,9 +4,9 @@ module FakeAWS
     module Operations
 
       class PutBucket
-        def initialize(root_directory, env)
+        def initialize(root_directory, request)
           @root_directory = root_directory
-          @env            = env
+          @request        = request
         end
 
         def call
@@ -27,7 +27,7 @@ module FakeAWS
         end
 
         def object_store
-          @object_store ||= ObjectStore.new(@root_directory, @env["SERVER_NAME"], @env["PATH_INFO"])
+          @object_store ||= ObjectStore.new(@root_directory, @request.bucket)
         end
 
       end

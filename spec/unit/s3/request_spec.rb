@@ -1,9 +1,28 @@
 require 'spec_helper'
 
-describe FakeAWS::S3::RequestParser do
+describe FakeAWS::S3::Request do
+  subject { described_class.new(env) }
+
+  context "#method" do
+    it "works"
+  end
+
+  context "#content_type" do
+    it "works"
+  end
+
+  context "#content" do
+    it "works"
+  end
+
+  context "#http_headers" do
+    it "works"
+  end
 
   context "with a path-style request" do
-    subject { described_class.new("s3.amazonaws.com", "/mah-bucket/mah-object.txt") }
+    let(:env) do
+      { "SERVER_NAME" => "s3.amazonaws.com", "PATH_INFO" => "/mah-bucket/mah-object.txt" }
+    end
 
     it "extracts the bucket" do
       expect(subject.bucket).to eq("mah-bucket")
@@ -15,7 +34,9 @@ describe FakeAWS::S3::RequestParser do
   end
 
   context "with a virtual hosted-style request" do
-    subject { described_class.new("mah-bucket.s3.amazonaws.com", "/mah-object.txt") }
+    let(:env) do
+      { "SERVER_NAME" => "mah-bucket.s3.amazonaws.com", "PATH_INFO" => "/mah-object.txt" }
+    end
 
     it "extracts the bucket" do
       expect(subject.bucket).to eq("mah-bucket")
@@ -31,7 +52,9 @@ describe FakeAWS::S3::RequestParser do
   end
 
   context "with a CNAME-style request" do
-    subject { described_class.new("mah-bucket.mah-domain.com", "/mah-object.txt") }
+    let(:env) do
+      { "SERVER_NAME" => "mah-bucket.mah-domain.com", "PATH_INFO" => "/mah-object.txt" }
+    end
 
     it "extracts the bucket" do
       expect(subject.bucket).to eq("mah-bucket.mah-domain.com")
@@ -43,7 +66,9 @@ describe FakeAWS::S3::RequestParser do
   end
 
   context "with just a bucket" do
-    subject { described_class.new("s3.amazonaws.com", "/mah-bucket") }
+    let(:env) do
+      { "SERVER_NAME" => "s3.amazonaws.com", "PATH_INFO" => "/mah-bucket" }
+    end
 
     it "extracts the bucket" do
       expect(subject.bucket).to eq("mah-bucket")

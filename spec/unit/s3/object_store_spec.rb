@@ -2,10 +2,10 @@ require 'spec_helper'
 
 describe FakeAWS::S3::ObjectStore do
   let(:root_directory)     { "tmp" }
-  let(:server_name)        { "s3.amazonaws.com" }
-  let(:path_info)          { "/mah-bucket/mah-file.txt" }
+  let(:bucket)             { "mah-bucket" }
+  let(:key)                { "/mah-file.txt" }
 
-  subject { described_class.new(root_directory, server_name, path_info) }
+  subject { described_class.new(root_directory, bucket, key) }
 
   let(:bucket_path)        { "tmp/mah-bucket" }
   let(:object_file_path)   { "tmp/mah-bucket/mah-file.txt" }

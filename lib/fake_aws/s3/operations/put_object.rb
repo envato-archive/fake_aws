@@ -4,21 +4,19 @@ module FakeAWS
     module Operations
 
       class PutObject
-        def initialize(root_directory, env)
+        def initialize(root_directory, request)
           @root_directory = root_directory
-          @env            = env
+          @request        = request
         end
 
         def call
           return no_such_bucket_response unless object_store.bucket_exists?
 
-          object_store.write_object(content, metadata)
+          object_store.write_object(@request.content, metadata)
           success_response
         end
 
       private
-
-        extend Forwardable
 
         def success_response
           Responses::Empty.new
@@ -28,30 +26,20 @@ module FakeAWS
           Responses::Error.new("NoSuchBucket", "BucketName" => object_store.bucket)
         end
 
-        def content
-          @env["rack.input"].read
-        end
-
         def metadata
           @metadata ||= [content_type_metadata, user_metadata].inject(:merge)
         end
 
         def content_type_metadata
-          { "Content-Type" => @env["CONTENT_TYPE"] }
+          { "Content-Type" => @request.content_type }
         end
 
         def user_metadata
-          http_headers.select {|key, _| key.start_with?("x-amz-meta-") }
-        end
-
-        def_delegator :env_helper, :http_headers
-
-        def env_helper
-          @env_helper ||= EnvHelper.new(@env)
+          @request.http_headers.select {|key, _| key.start_with?("x-amz-meta-") }
         end
 
         def object_store
-          @object_store ||= ObjectStore.new(@root_directory, @env["SERVER_NAME"], @env["PATH_INFO"])
+          @object_store ||= ObjectStore.new(@root_directory, @request.bucket, @request.key)
         end
 
       end

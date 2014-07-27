@@ -7,21 +7,20 @@ module FakeAWS
       end
 
       def call(env)
-        operation_for(env).call.to_rack_response
+        request = Request.new(env)
+        operation_for(request).call.to_rack_response
       end
 
     private
 
-      def operation_for(env)
-        operation_class(env).new(@directory, env)
+      def operation_for(request)
+        operation_class(request).new(@directory, request)
       end
 
-      def operation_class(env)
-        request_parser = RequestParser.new(env["SERVER_NAME"], env["PATH_INFO"])
-
-        case env["REQUEST_METHOD"]
+      def operation_class(request)
+        case request.method
           when "PUT"
-            if request_parser.has_key?
+            if request.has_key?
               Operations::PutObject
             else
               Operations::PutBucket
