@@ -56,13 +56,20 @@ end
 
 will create a file `root_directory/test_bucket/test_path/test_file.txt`.
 
-(Note: `root_directory/test_bucket` must already exist! As there's no
-implementation of the Create Bucket operation yet, you'll need to make the
-directory for the bucket yourself before doing a PUT Object.)
-
 It will also create
 `root_directory/test_bucket/test_path/test_file.txt.metadata.json`, which holds
 the metadata for the file as a JSON hash.
+
+
+## Implemented Operations
+
+### S3
+
+- [GET Object](http://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectGET.html)
+- [PUT Bucket](http://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketPUT.html)
+- [PUT Object](http://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectPUT.html)
+
+Pull requests for other operations are welcome!
 
 
 ## Contributing
