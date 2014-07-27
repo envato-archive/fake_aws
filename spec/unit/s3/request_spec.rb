@@ -47,7 +47,7 @@ describe FakeAWS::S3::Request do
     end
 
     it "has a key" do
-      expect(subject.has_key?).to be_true
+      expect(subject.has_key?).to be_truthy
     end
   end
 
@@ -75,7 +75,7 @@ describe FakeAWS::S3::Request do
     end
 
     it "doesn't have a key" do
-      expect(subject.has_key?).to be_false
+      expect(subject.has_key?).to be_falsy
     end
   end
 

@@ -21,7 +21,7 @@ describe "S3 PUT Bucket operation" do
 
     it "creates the bucket directory on disk" do
       response = put_bucket
-      expect(Dir.exist?(bucket_path)).to be_true
+      expect(Dir.exist?(bucket_path)).to be_truthy
     end
   end
 

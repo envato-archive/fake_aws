@@ -30,12 +30,12 @@ describe FakeAWS::S3::ObjectStore do
 
   describe "#bucket_exists?" do
     it "returns true if the bucket directory exists" do
-      expect(subject.bucket_exists?).to be_true
+      expect(subject.bucket_exists?).to be_truthy
     end
 
     it "returns false if the bucket directory doesn't exist" do
       FileUtils.rmdir(bucket_path)
-      expect(subject.bucket_exists?).to be_false
+      expect(subject.bucket_exists?).to be_falsy
     end
   end
 
@@ -43,18 +43,18 @@ describe FakeAWS::S3::ObjectStore do
     it "creates the bucket directory" do
       FileUtils.rmdir(bucket_path)
       subject.create_bucket
-      expect(Dir.exists?(bucket_path)).to be_true
+      expect(Dir.exists?(bucket_path)).to be_truthy
     end
   end
 
   describe "#object_exists?" do
     it "returns true if the object file exists" do
       File.write(object_file_path, "Hello, world!")
-      expect(subject.object_exists?).to be_true
+      expect(subject.object_exists?).to be_truthy
     end
 
     it "returns file if the object file doesn't exist" do
-      expect(subject.object_exists?).to be_false
+      expect(subject.object_exists?).to be_falsy
     end
   end
 
