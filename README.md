@@ -65,6 +65,9 @@ the metadata for the file as a JSON hash.
 
 ### S3
 
+Path-style, virtual-hosted-style, and CNAME-style requests are supported for
+all operations.
+
 - [GET Object](http://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectGET.html)
 - [PUT Bucket](http://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketPUT.html)
 - [PUT Object](http://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectPUT.html)
@@ -82,7 +85,9 @@ Pull requests for other operations are welcome!
 
 ## To Do
 
-- Handle PUT Object Copy requests
+- Implement [GET Bucket](http://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketGET.html) requests
+- Improve the [response headers](http://docs.aws.amazon.com/AmazonS3/latest/API/RESTCommonResponseHeaders.html) (Content-Length, ETag, etc.)
 - Check signing of requests
+- Handle PUT Object Copy requests
 
 
