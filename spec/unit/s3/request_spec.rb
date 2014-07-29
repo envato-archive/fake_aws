@@ -66,7 +66,6 @@ describe FakeAWS::S3::Request do
         expect(request.key).to eq(key)
       end
     end
-
   end
 
   context "path-style" do
