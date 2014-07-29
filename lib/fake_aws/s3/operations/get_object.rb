@@ -9,8 +9,8 @@ module FakeAWS
         end
 
         def call
-          return no_such_bucket_response unless object_store.bucket_exists?
-          return no_such_key_response    unless object_store.object_exists?
+          return no_such_bucket_response unless bucket_on_disk.exists?
+          return no_such_key_response    unless object_on_disk.exists?
 
           success_response
         end
@@ -18,15 +18,15 @@ module FakeAWS
       private
 
         def success_response
-          Responses::Success.new(headers, object_store.read_object)
+          Responses::Success.new(headers, object_on_disk.read_content)
         end
 
         def no_such_bucket_response
-          Responses::Error.new("NoSuchBucket", "BucketName" => object_store.bucket)
+          Responses::Error.new("NoSuchBucket", "BucketName" => @request.bucket)
         end
 
         def no_such_key_response
-          Responses::Error.new("NoSuchKey", "Resource" => object_store.key)
+          Responses::Error.new("NoSuchKey", "Resource" => @request.key)
         end
 
         def headers
@@ -42,12 +42,17 @@ module FakeAWS
         end
 
         def metadata
-          @metadata ||= object_store.read_metadata
+          @metadata ||= object_on_disk.read_metadata
         end
 
-        def object_store
-          @object_store ||= ObjectStore.new(@root_directory, @request.bucket, @request.key)
+        def object_on_disk
+          @object_on_disk ||= ObjectOnDisk.new(bucket_on_disk, @request.key)
         end
+
+        def bucket_on_disk
+          @bucket_on_disk ||= BucketOnDisk.new(@root_directory, @request.bucket)
+        end
+
       end
 
     end

@@ -10,9 +10,9 @@ module FakeAWS
         end
 
         def call
-          return bucket_already_exists_response if object_store.bucket_exists?
+          return bucket_already_exists_response if bucket_on_disk.exists?
 
-          object_store.create_bucket
+          bucket_on_disk.create
           success_response
         end
 
@@ -23,11 +23,11 @@ module FakeAWS
         end
 
         def bucket_already_exists_response
-          Responses::Error.new("BucketAlreadyExists", "BucketName" => object_store.bucket)
+          Responses::Error.new("BucketAlreadyExists", "BucketName" => @request.bucket)
         end
 
-        def object_store
-          @object_store ||= ObjectStore.new(@root_directory, @request.bucket)
+        def bucket_on_disk
+          @bucket_on_disk ||= BucketOnDisk.new(@root_directory, @request.bucket)
         end
 
       end

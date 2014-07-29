@@ -10,9 +10,9 @@ module FakeAWS
         end
 
         def call
-          return no_such_bucket_response unless object_store.bucket_exists?
+          return no_such_bucket_response unless bucket_on_disk.exists?
 
-          object_store.write_object(@request.content, metadata)
+          object_on_disk.write(@request.content, metadata)
           success_response
         end
 
@@ -23,7 +23,7 @@ module FakeAWS
         end
 
         def no_such_bucket_response
-          Responses::Error.new("NoSuchBucket", "BucketName" => object_store.bucket)
+          Responses::Error.new("NoSuchBucket", "BucketName" => @request.bucket)
         end
 
         def metadata
@@ -38,8 +38,12 @@ module FakeAWS
           @request.http_headers.select {|key, _| key.start_with?("x-amz-meta-") }
         end
 
-        def object_store
-          @object_store ||= ObjectStore.new(@root_directory, @request.bucket, @request.key)
+        def object_on_disk
+          @object_on_disk ||= ObjectOnDisk.new(bucket_on_disk, @request.key)
+        end
+
+        def bucket_on_disk
+          @bucket_on_disk ||= BucketOnDisk.new(@root_directory, @request.bucket)
         end
 
       end
