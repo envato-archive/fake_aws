@@ -38,64 +38,56 @@ describe FakeAWS::S3::Request do
     end
   end
 
-  context "with a path-style request" do
-    let(:env) do
-      { "SERVER_NAME" => "s3.amazonaws.com", "PATH_INFO" => "/mah-bucket/mah-object.txt" }
+  shared_examples "request parsing" do
+    context "bucket request" do
+      let(:key) { "/" }
+
+      it "extracts the bucket" do
+        expect(request.bucket).to eq(bucket)
+      end
+
+      it "has no key" do
+        expect(request.has_key?).to be_falsy
+      end
     end
 
-    it "extracts the bucket" do
-      expect(subject.bucket).to eq("mah-bucket")
+    context "object request" do
+      let(:key) { "/mah-object.txt" }
+
+      it "extracts the bucket" do
+        expect(request.bucket).to eq(bucket)
+      end
+
+      it "has a key" do
+        expect(request.has_key?).to be_truthy
+      end
+
+      it "extracts the key" do
+        expect(request.key).to eq(key)
+      end
     end
 
-    it "extracts the key" do
-      expect(subject.key).to eq("/mah-object.txt")
-    end
   end
 
-  context "with a virtual hosted-style request" do
-    let(:env) do
-      { "SERVER_NAME" => "mah-bucket.s3.amazonaws.com", "PATH_INFO" => "/mah-object.txt" }
-    end
+  context "path-style" do
+    let(:bucket) { "mah-bucket" }
+    subject(:request) { described_class.new("SERVER_NAME" => "s3.amazonaws.com", "PATH_INFO" => "/#{bucket}#{key}") }
 
-    it "extracts the bucket" do
-      expect(subject.bucket).to eq("mah-bucket")
-    end
-
-    it "extracts the key" do
-      expect(subject.key).to eq("/mah-object.txt")
-    end
-
-    it "has a key" do
-      expect(subject.has_key?).to be_truthy
-    end
+    include_examples "request parsing"
   end
 
-  context "with a CNAME-style request" do
-    let(:env) do
-      { "SERVER_NAME" => "mah-bucket.mah-domain.com", "PATH_INFO" => "/mah-object.txt" }
-    end
+  context "virtual hosted-style" do
+    let(:bucket) { "mah-bucket" }
+    subject(:request) { described_class.new("SERVER_NAME" => "#{bucket}.s3.amazonaws.com", "PATH_INFO" => key) }
 
-    it "extracts the bucket" do
-      expect(subject.bucket).to eq("mah-bucket.mah-domain.com")
-    end
-
-    it "extracts the key" do
-      expect(subject.key).to eq("/mah-object.txt")
-    end
+    include_examples "request parsing"
   end
 
-  context "with just a bucket" do
-    let(:env) do
-      { "SERVER_NAME" => "s3.amazonaws.com", "PATH_INFO" => "/mah-bucket" }
-    end
+  context "CNAME-style" do
+    let(:bucket) { "mah-bucket.mah-domain.com" }
+    subject(:request) { described_class.new("SERVER_NAME" => bucket, "PATH_INFO" => key) }
 
-    it "extracts the bucket" do
-      expect(subject.bucket).to eq("mah-bucket")
-    end
-
-    it "doesn't have a key" do
-      expect(subject.has_key?).to be_falsy
-    end
+    include_examples "request parsing"
   end
 
 end
