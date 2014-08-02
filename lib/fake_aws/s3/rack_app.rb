@@ -28,7 +28,7 @@ module FakeAWS
           when "GET"
             Operations::GetObject
           else
-            raise FakeAWS::UnsupportedRequestError # TODO: This needs a spec.
+            raise FakeAWS::UnsupportedRequestError
         end
       end
 
