@@ -5,7 +5,7 @@ module FakeAWS
 
     class ObjectOnDisk
 
-      def initialize(bucket_on_disk, key = nil)
+      def initialize(bucket_on_disk, key)
         @bucket_on_disk = bucket_on_disk
         @key            = key
       end
@@ -15,7 +15,7 @@ module FakeAWS
       end
 
       def write(content, metadata)
-        FileUtils.mkdir_p(directory_path)
+        FileUtils.mkdir_p(File.dirname(object_path))
         File.write(object_path, content)
         File.write(metadata_path, metadata.to_json)
       end
@@ -38,10 +38,6 @@ module FakeAWS
 
       def metadata_path
         @metadata_path ||= File.join("#{object_path}.metadata.json")
-      end
-
-      def directory_path
-        @directory_path ||= File.dirname(object_path)
       end
 
     end

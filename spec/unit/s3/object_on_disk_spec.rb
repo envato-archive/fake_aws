@@ -73,10 +73,4 @@ describe FakeAWS::S3::ObjectOnDisk do
     end
   end
 
-  describe "#directory_path" do
-    it "returns the path to the directory containing the object" do
-      expect(subject.directory_path).to eq(bucket_path)
-    end
-  end
-
 end
