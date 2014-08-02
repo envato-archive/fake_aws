@@ -37,7 +37,7 @@ module FakeAWS
       end
 
       def metadata_path
-        @metadata_path ||= File.join("#{object_path}.metadata.json")
+        @metadata_path ||= "#{object_path}.metadata.json"
       end
 
     end
