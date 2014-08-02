@@ -1,14 +1,12 @@
 module FakeAWS
   module S3
 
-    # Extract the bucket and key from the various different styles of S3 request.
+    # Extract information from an incoming S3 request.
     #
     # See http://docs.aws.amazon.com/AmazonS3/latest/dev/VirtualHosting.html
     class Request
       def initialize(env)
         @env = env
-        @server_name = env["SERVER_NAME"]
-        @path_info   = env["PATH_INFO"]
       end
 
       def method
@@ -35,7 +33,7 @@ module FakeAWS
           when :virtual_hosted
             server_name_components[0..-4].join(".")
           when :cname
-            @server_name
+            server_name
           else
             raise "Uh oh"
         end
