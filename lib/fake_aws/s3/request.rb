@@ -35,7 +35,7 @@ module FakeAWS
           when :cname
             server_name
           else
-            raise "Uh oh"
+            raise FakeAWS::InternalError
         end
       end
 
@@ -46,7 +46,7 @@ module FakeAWS
           when :virtual_hosted, :cname
             path_components.join("/")
           else
-            raise "Uh oh"
+            raise FakeAWS::InternalError
         end
       end
 

@@ -13,4 +13,11 @@ module FakeAWS
       super("FakeAWS doesn't (yet) support this type of AWS request.")
     end
   end
+
+  class InternalError < Error
+    def initialize
+      super("Shouldn't ever get here! Looks like a bug in FakeAWS.")
+    end
+  end
+
 end
