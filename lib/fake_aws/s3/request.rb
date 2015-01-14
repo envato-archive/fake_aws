@@ -54,6 +54,10 @@ module FakeAWS
         key != "/"
       end
 
+      def put_acl?
+        @env['QUERY_STRING'].include?('acl=')
+      end
+
     private
 
       def server_name
