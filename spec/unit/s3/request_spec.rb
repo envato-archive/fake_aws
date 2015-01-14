@@ -70,21 +70,21 @@ describe FakeAWS::S3::Request do
 
   context "path-style" do
     let(:bucket) { "mah-bucket" }
-    subject(:request) { described_class.new("SERVER_NAME" => "s3.amazonaws.com", "PATH_INFO" => "/#{bucket}#{key}") }
+    subject(:request) { described_class.new("SERVER_NAME" => "s3.amazonaws.com", "REQUEST_PATH" => "/#{bucket}#{key}") }
 
     include_examples "request parsing"
   end
 
   context "virtual hosted-style" do
     let(:bucket) { "mah-bucket" }
-    subject(:request) { described_class.new("SERVER_NAME" => "#{bucket}.s3.amazonaws.com", "PATH_INFO" => key) }
+    subject(:request) { described_class.new("SERVER_NAME" => "#{bucket}.s3.amazonaws.com", "REQUEST_PATH" => key) }
 
     include_examples "request parsing"
   end
 
   context "CNAME-style" do
     let(:bucket) { "mah-bucket.mah-domain.com" }
-    subject(:request) { described_class.new("SERVER_NAME" => bucket, "PATH_INFO" => key) }
+    subject(:request) { described_class.new("SERVER_NAME" => bucket, "REQUEST_PATH" => key) }
 
     include_examples "request parsing"
   end

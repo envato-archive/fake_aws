@@ -60,8 +60,8 @@ module FakeAWS
         @server_name ||= @env["SERVER_NAME"]
       end
 
-      def path_info
-        @path_info ||= @env["PATH_INFO"]
+      def request_path
+        @request_path ||= @env["REQUEST_PATH"]
       end
 
       def server_name_components
@@ -69,11 +69,11 @@ module FakeAWS
       end
 
       def path_components
-        @path_components ||= path_info.split("/").drop(1)
+        @path_components ||= request_path.split("/").drop(1)
       end
 
       def request_style
-        @request_style ||= if server_name =~ %r{s3[-\w\d]*\.amazonaws\.com$}
+        @request_style ||= if server_name =~ %r{s3[-\w\d]*}
           if server_name_components.length > 3
             :virtual_hosted
           else
