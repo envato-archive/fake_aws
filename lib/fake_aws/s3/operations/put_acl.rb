@@ -3,7 +3,7 @@ module FakeAWS
 
     module Operations
 
-      class SetACL
+      class PutACL
         def initialize(root_directory, request)
           @root_directory = root_directory
           @request        = request
