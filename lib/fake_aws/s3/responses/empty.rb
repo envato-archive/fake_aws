@@ -14,7 +14,7 @@ module FakeAWS
         end
 
         def body
-          ""
+          [""]
         end
       end
 
