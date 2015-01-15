@@ -1,6 +1,18 @@
 require 'spec_helper'
 
 describe FakeAWS::S3::Request do
+  context "#http_headers" do
+    it "returns the HTTP headers" do
+      request = described_class.new("HTTP_X_FOO" => "foo", "HTTP_X_BAR" => "bar")
+      expect(request.http_headers).to eq("x-foo" => "foo", "x-bar" => "bar")
+    end
+
+    it "ignores non-HTTP headers" do
+      request = described_class.new("FOO" => "foo")
+      expect(request.http_headers).to eq({})
+    end
+  end
+
   shared_examples "request parsing" do
     context "bucket request" do
       let(:key) { "/" }
