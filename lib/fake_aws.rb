@@ -1,3 +1,4 @@
+require 'rack'
 require "fake_aws/version"
 require "fake_aws/error"
 require "fake_aws/s3/bucket_on_disk"
