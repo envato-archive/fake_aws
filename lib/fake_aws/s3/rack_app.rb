@@ -18,10 +18,10 @@ module FakeAWS
       end
 
       def operation_class(request)
-        case request.request_method
-          when "PUT"
+        case
+          when request.put?
             get_put_operation_class(request)
-          when "GET"
+          when request.get?
             Operations::GetObject
           else
             raise FakeAWS::UnsupportedRequestError
@@ -30,8 +30,10 @@ module FakeAWS
 
       def get_put_operation_class(request)
         case
-          when request.has_key? then Operations::PutObject
-                                else Operations::PutBucket
+          when request.has_key?
+           Operations::PutObject
+          else
+            Operations::PutBucket
         end
       end
 
