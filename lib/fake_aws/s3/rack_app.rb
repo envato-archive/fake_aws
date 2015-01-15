@@ -30,7 +30,6 @@ module FakeAWS
 
       def get_put_operation_class(request)
         case
-          when request.put_acl? then Operations::PutACL
           when request.has_key? then Operations::PutObject
                                 else Operations::PutBucket
         end
