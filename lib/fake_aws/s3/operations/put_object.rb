@@ -12,7 +12,7 @@ module FakeAWS
         def call
           return no_such_bucket_response unless bucket_on_disk.exists?
 
-          object_on_disk.write(@request.content, metadata)
+          object_on_disk.write(@request.body.read, metadata)
           success_response
         end
 

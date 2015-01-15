@@ -18,7 +18,7 @@ module FakeAWS
       end
 
       def operation_class(request)
-        case request.method
+        case request.request_method
           when "PUT"
             get_put_operation_class(request)
           when "GET"
