@@ -15,7 +15,7 @@ module FakeAWS
           when :path
             path_components.first
           when :virtual_hosted
-            server_name_components[0..-4].join(".")
+            host_name_components[0..-4].join(".")
           when :cname
             host
           else
@@ -40,8 +40,8 @@ module FakeAWS
 
     private
 
-      def server_name_components
-        @server_name_components ||= host.split(".")
+      def host_name_components
+        @host_name_components ||= host.split(".")
       end
 
       def path_components
@@ -50,7 +50,7 @@ module FakeAWS
 
       def request_style
         @request_style ||= if host =~ %r{s3[-\w\d]*}
-          if server_name_components.length > 3
+          if host_name_components.length > 3
             :virtual_hosted
           else
             :path
