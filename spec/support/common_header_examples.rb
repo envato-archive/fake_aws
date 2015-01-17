@@ -3,7 +3,6 @@ shared_examples "common response headers" do
   it "has a Date header" do
     time = Time.parse("2013-11-18 17:45")
     allow(Time).to receive(:now).and_return(time)
-    
     expect(subject.headers["Date"]).to eq(time.httpdate)
   end
 
