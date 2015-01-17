@@ -15,17 +15,17 @@ describe FakeAWS::S3::Responses::Error do
   include_examples "common response headers"
 
   it "has the right status code" do
-    expect(subject.status_code).to eq(error.status_code)
+    expect(subject.status).to eq(error.status_code)
   end
 
   it "has a content type of XML" do
-    expect(subject.headers["Content-Type"]).to eq("application/xml")
+    expect(subject.header["Content-Type"]).to eq("application/xml")
   end
 
   context "body" do
     include XMLParsingHelper
 
-    let(:parsed_body) { parse_xml(subject.body) }
+    let(:parsed_body) { parse_xml(subject.body.first) }
 
     it "contains the right code" do
       expect(parsed_body["Error"]["Code"]).to eq(error_code)
@@ -40,7 +40,7 @@ describe FakeAWS::S3::Responses::Error do
     end
 
     it "contains the right request ID" do
-      expect(parsed_body["Error"]["RequestId"]).to eq(subject.headers["x-amz-request-id"])
+      expect(parsed_body["Error"]["RequestId"]).to eq(subject.header["x-amz-request-id"])
     end
   end
 

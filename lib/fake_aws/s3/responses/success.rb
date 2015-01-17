@@ -2,24 +2,11 @@ module FakeAWS
   module S3
     module Responses
 
-      class Success
+      class Success < Rack::Response
         include Common
 
-        def initialize(headers, body)
-          @headers = headers
-          @body    = body
-        end
-
-        def status_code
-          200
-        end
-
-        def headers
-          common_headers.merge(@headers)
-        end
-
-        def body
-          @body
+        def initialize(body, status, headers)
+          super body, status, common_headers.merge(headers)
         end
       end
 

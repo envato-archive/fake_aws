@@ -2,13 +2,17 @@ module FakeAWS
   module S3
     module Responses
 
-      class Error
+      class Error < Rack::Response
         include Common
 
         def initialize(error_code, fields = {})
           @error_code = error_code
           @fields     = fields
+
+          super(xml_payload, status_code, headers)
         end
+
+        private
 
         def status_code
           error.status_code
@@ -18,7 +22,7 @@ module FakeAWS
           @headers ||= common_headers.merge("Content-Type" => "application/xml")
         end
 
-        def body
+        def xml_payload
           "".tap do |xml|
             xml << %q{<?xml version="1.0" encoding="UTF-8"?>\n}
             xml << %q{<Error>}

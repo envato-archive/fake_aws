@@ -2,19 +2,11 @@ module FakeAWS
   module S3
     module Responses
 
-      class Empty
+      class Empty < Rack::Response
         include Common
 
-        def status_code
-          200
-        end
-
-        def headers
-          common_headers
-        end
-
-        def body
-          [""]
+        def initialize
+          super([], 200, common_headers)
         end
       end
 

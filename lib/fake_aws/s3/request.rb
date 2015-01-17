@@ -1,5 +1,3 @@
-require "rack/request"
-
 module FakeAWS
   module S3
 
