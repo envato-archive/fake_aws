@@ -18,7 +18,7 @@ describe FakeAWS::S3::Responses::Success do
   end
 
   it "has the right content type" do
-    expect(subject.header["Content-Type"]).to eq("text/plain")
+    expect(subject.headers["Content-Type"]).to eq("text/plain")
   end
 
 end

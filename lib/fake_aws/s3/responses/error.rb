@@ -9,17 +9,13 @@ module FakeAWS
           @error_code = error_code
           @fields     = fields
 
-          super(xml_payload, status_code, headers)
+          super xml_payload, status_code, common_headers.merge("Content-Type" => "application/xml")
         end
 
         private
 
         def status_code
           error.status_code
-        end
-
-        def headers
-          @headers ||= common_headers.merge("Content-Type" => "application/xml")
         end
 
         def xml_payload

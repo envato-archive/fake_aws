@@ -19,7 +19,7 @@ describe FakeAWS::S3::Responses::Error do
   end
 
   it "has a content type of XML" do
-    expect(subject.header["Content-Type"]).to eq("application/xml")
+    expect(subject.headers["Content-Type"]).to eq("application/xml")
   end
 
   context "body" do
@@ -40,7 +40,7 @@ describe FakeAWS::S3::Responses::Error do
     end
 
     it "contains the right request ID" do
-      expect(parsed_body["Error"]["RequestId"]).to eq(subject.header["x-amz-request-id"])
+      expect(parsed_body["Error"]["RequestId"]).to eq(subject.headers["x-amz-request-id"])
     end
   end
 

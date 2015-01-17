@@ -4,14 +4,14 @@ shared_examples "common response headers" do
     time = Time.parse("2013-11-18 17:45")
     allow(Time).to receive(:now).and_return(time)
     
-    expect(subject.header["Date"]).to eq(time.httpdate)
+    expect(subject.headers["Date"]).to eq(time.httpdate)
   end
 
   it "has a Server header" do
-    expect(subject.header["Server"]).to eq("AmazonS3")
+    expect(subject.headers["Server"]).to eq("AmazonS3")
   end
 
   it "has a request ID" do
-    expect(subject.header["x-amz-request-id"]).to_not be_blank
+    expect(subject.headers["x-amz-request-id"]).to_not be_blank
   end
 end
