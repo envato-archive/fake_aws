@@ -5,8 +5,8 @@ module FakeAWS
       class Empty < Rack::Response
         include Common
 
-        def initialize
-          super([], 200, common_headers)
+        def initialize(status = 200, headers = common_headers)
+          super([], status, headers)
         end
       end
 
