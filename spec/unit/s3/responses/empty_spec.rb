@@ -8,7 +8,7 @@ describe FakeAWS::S3::Responses::Empty do
   end
 
   it "has an empty body" do
-    expect(subject.body).to be_empty
+    expect(subject).to be_empty
   end
 
 end
