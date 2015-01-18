@@ -5,7 +5,7 @@ module FakeAWS
       class Success < Rack::Response
         include Common
 
-        def initialize(body, status, headers)
+        def initialize(body, status, headers = {})
           super body, status, common_headers.merge(headers)
         end
       end
