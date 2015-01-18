@@ -12,3 +12,5 @@ require "fake_aws/s3/responses/common"
 require "fake_aws/s3/responses/empty"
 require "fake_aws/s3/responses/error"
 require "fake_aws/s3/responses/success"
+
+require 'fake_aws/railtie' if defined?(Rails)
