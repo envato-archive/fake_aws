@@ -1,3 +1,5 @@
+require 'rack/response'
+
 module FakeAWS
   module S3
     module Responses
