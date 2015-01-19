@@ -8,7 +8,7 @@ module FakeAWS
 
       def call(env)
         request = Request.new(env)
-        operation_for(request).call.to_rack_response
+        operation_for(request).call
       end
 
     private

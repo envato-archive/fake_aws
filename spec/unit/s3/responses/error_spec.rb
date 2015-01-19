@@ -15,7 +15,7 @@ describe FakeAWS::S3::Responses::Error do
   include_examples "common response headers"
 
   it "has the right status code" do
-    expect(subject.status_code).to eq(error.status_code)
+    expect(subject.status).to eq(error.status_code)
   end
 
   it "has a content type of XML" do
@@ -25,7 +25,7 @@ describe FakeAWS::S3::Responses::Error do
   context "body" do
     include XMLParsingHelper
 
-    let(:parsed_body) { parse_xml(subject.body) }
+    let(:parsed_body) { parse_xml(subject.body.first) }
 
     it "contains the right code" do
       expect(parsed_body["Error"]["Code"]).to eq(error_code)

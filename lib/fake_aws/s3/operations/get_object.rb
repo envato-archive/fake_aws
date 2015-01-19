@@ -18,7 +18,7 @@ module FakeAWS
       private
 
         def success_response
-          Responses::Success.new(headers, object_on_disk.read_content)
+          Responses::Success.new(object_on_disk.read_content, 200, headers)
         end
 
         def no_such_bucket_response
