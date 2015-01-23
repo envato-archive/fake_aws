@@ -54,6 +54,9 @@ It will also create
 `root_directory/test_bucket/test_path/test_file.txt.metadata.json`, which holds
 the metadata for the file as a JSON hash.
 
+## Rake tasks
+
+Run `fake_aws:nuke` to delete all files inside the Fake AWS root directory.
 
 ## Implemented Operations
 
